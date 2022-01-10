@@ -1,4 +1,4 @@
 __pycache__/
 *.py[cod]
 *$py.class
-rentabot/rentabot/spiders/parsed_appartments.txt
+.rentabot/rentabot/spiders/parsed_appartments.txt
