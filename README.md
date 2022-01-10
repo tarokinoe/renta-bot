@@ -1,38 +1,20 @@
-# renta-bot
-парсит сайт snimaem-sami.ru и шлет уведомления о новых объявлениях в телеграм
+# Renta-bot
 
-## Настройка
-В rentabot/rentabot/spiders/snimaemsami.py нужно указать:  
-START_PAGE - страницу с нужным фильтром квартир  
-BOT_TOKEN - токен бота  
-CHAT_ID - чат, в который бот будет слать уведомления  
-
-## Запуск 
+## Docker
 ```
-cd rentabot
-scrapy crawl snimaem-sami
+# ../conf/.env
+RENTABOT_TELEGRAM_BOT_TOKEN=
+RENTABOT_TELEGRAM_CHAT_ID=
+RENTABOT_SITE_BASE_URL=https://snimaem-sami.ru
+RENTABOT_START_PAGE=
+RENTABOT_PARSING_PERIOD_S=100
+RENTABOT_PARSED_APPARTMENTS_FILE=/app/parsed.txt
 ```
 
-## Получить CHAT_ID
-Получить СHAT_ID можно как-то при помощи следующих махинаций:
 ```
-import telegram
-from telegram.ext import Updater
-from telegram.ext import CommandHandler
-
-BOT_TOKEN = ""
-bot = telegram.Bot(token=BOT_TOKEN)
-updater = Updater(token=BOT_TOKEN)
-dispatcher = updater.dispatcher
-import logging
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.DEBUG)
-def start(bot, update):
-    bot.sendMessage(chat_id=update.message.chat_id, text="I'm a bot, please talk to me!")
-
-
-start_handler = CommandHandler('start', start)
-dispatcher.add_handler(start_handler)
-
-updater.start_polling()
+docker build -t renta-bot .
+# dev
+docker run --rm --name renta-bot --env-file ../conf/.env.docker renta-bot
+# prod
+docker run --name renta-bot -d --restart=always --env-file ../conf/.env renta-bot
 ```
