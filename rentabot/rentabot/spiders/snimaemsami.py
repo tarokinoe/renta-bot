@@ -18,13 +18,18 @@ class SnimaemsamiSpider(scrapy.Spider):
         self._appartments = set()
 
     def _save_parsed(self, url):
-        with open(self.settings.PARSED_APPARTMENTS_FILE, 'a') as f:
+        with open(self.settings.get('PARSED_APPARTMENTS_FILE'), 'a') as f:
             f.write(url + '\n')
 
         self._appartments.add(url)
 
     def start_requests(self):
         self._bot = telegram.Bot(token=self.settings.get('TELEGRAM_BOT_TOKEN'))
+
+        if not os.path.exists(self.settings.get('PARSED_APPARTMENTS_FILE')):
+            with open(self.settings.get('PARSED_APPARTMENTS_FILE'), 'w'):
+                pass
+
         with open(self.settings.get('PARSED_APPARTMENTS_FILE')) as f:
             self._appartments = set(map(str.strip, f))
 
@@ -36,7 +41,7 @@ class SnimaemsamiSpider(scrapy.Spider):
         for snippet in snippets:
             href = snippet.xpath('./h3/a/@href').get()
             if href and href not in self._appartments:
-                # self._save_parsed(href)
+                self._save_parsed(href)
                 logger.info(f'New appartments: {href}')
                 self._bot.sendMessage(
                     self.settings.get('TELEGRAM_CHAT_ID'),
