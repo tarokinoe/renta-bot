@@ -86,3 +86,14 @@ ROBOTSTXT_OBEY = True
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+
+# Custom
+# Telegram bot
+from .env import EnvSettings
+env = EnvSettings()
+TELEGRAM_BOT_TOKEN = env.TELEGRAM_BOT_TOKEN
+TELEGRAM_CHAT_ID = env.TELEGRAM_CHAT_ID
+SITE_BASE_URL = env.SITE_BASE_URL
+START_PAGE = env.START_PAGE
+PARSING_PERIOD_S = env.PARSING_PERIOD_S
+PARSED_APPARTMENTS_FILE = env.PARSED_APPARTMENTS_FILE
